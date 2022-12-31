@@ -1,47 +1,42 @@
 package org.example.action;
 
-import org.example.Main;
-import org.example.export.ExportInterface;
-import org.example.export.ToCsv;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.DataBase;
+import org.example.model.CurrencyCsv;
 import org.example.model.CurrencyExchange;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
+import java.io.*;
 import java.util.List;
 
-public class ExportToCsv extends AbstractAction {
-    public static String DEFAULT_EXPORT_FILE_NAME = String.format("currency_%s.csv", LocalDate.now().format(DateTimeFormatter.ISO_DATE));
 
+public class ExportToCsv extends AbstractAction {
+    private String file = "export.csv";
+    private ObjectMapper mapper= new ObjectMapper();
+    private CurrencyCsv l;
     private Component parent;
-    private ExportInterface<CurrencyExchange> CsvExport;
-    private CurrencyExchangeRepository currencyExchangeRepository;
+    private List<CurrencyExchange> list = DataBase.getInstance().getCur();
 
     public ExportToCsv(Component parent) {
         super("Export to CSV");
         this.parent = parent;
-        this.CsvExport = new ToCsv();
-        this.currencyExchangeRepository = CurrencyExchangeRepositorySqliteImpl.getInstance();
+        list = DataBase.getInstance().getValue();
         putValue(MNEMONIC_KEY, KeyEvent.VK_C);
     }
 
     @Override
     public void actionPerformed(ActionEvent event) {
-        JFileChooser fileChooser = new JFileChooser(Main.USER_HOME_PATH.toFile());
-        fileChooser.setFileFilter();
-        fileChooser.setSelectedFile(Main.USER_HOME_PATH.resolve(DEFAULT_EXPORT_FILE_NAME).toFile());
-        File selectedFile = fileChooser.getSelectedFile();
-        List<CurrencyExchange> allCurrencies = currencyExchangeRepository.findAll();
-        String fileContent = CsvExport.export(allCurrencies);
+        String s = "id, value , nominal , name , code , date \n";
+        for(int i =0; i<34; i++){
+            s = s + list.get(i).getId().toString() + " , " + list.get(i).getValue().toString() + " , " + list.get(i).getNominal().toString() + " , " + list.get(i).getCurrencyName() + " , " + list.get(i).getCurrencyCode() + " , " + list.get(i).getDate().toString() + " \n ";
+        }
+        l = new CurrencyCsv(s);
         try {
-            FileWriter writer = new FileWriter(selectedFile);
-            writer.write(fileContent);
+            System.out.println(s);
+            mapper.writeValue(new File(file),l);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

@@ -2,9 +2,14 @@ package org.example.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
+import org.example.Date;
+import org.example.dto.util.DayOfWeekService;
 import org.example.dto.util.DoubleDeserializer;
 
+import java.time.LocalDate;
+
 public class Valute {
+	private static int x = 1;
 	@JacksonXmlProperty(localName = "ID", isAttribute = true)
 	private String id;
 	@JacksonXmlProperty(localName = "NumCode")
@@ -81,14 +86,18 @@ public class Valute {
 
 	@Override
 	public String toString() {
+		if (x == 35){
+			x = 1;
+		}
 		final StringBuilder sb = new StringBuilder("(");
-		sb.append("").append(id);
-		sb.append(", ").append(numCode);
-		sb.append(", ").append(charCode);
-		sb.append(", ").append(nominal);
-		sb.append(", ").append(name);
+		sb.append("").append(x);
 		sb.append(", ").append(value);
+		sb.append(", ").append(nominal);
+		sb.append(", \"").append(name).append("\"");
+		sb.append(", \"").append(charCode).append("\"");
+		sb.append(", ").append(new Date().getDat());
 		sb.append(')');
+		x = x + 1;
 		return sb.toString();
 	}
 }

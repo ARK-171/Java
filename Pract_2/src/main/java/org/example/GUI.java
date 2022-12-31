@@ -1,22 +1,22 @@
 package org.example;
 
-import javax.swing.*;
+import javax.swing.*;;
 import java.awt.*;
 import java.awt.event.ActionEvent;
-import java.time.LocalDate;
 import java.util.List;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.action.ExportToCsv;
 import org.example.action.ExportToJson;
 import org.example.action.Exit;
 import org.example.action.About;
-import org.example.controler.CBCurrencyController;
-import org.example.controler.CurrencyExchangeController;
 import org.example.model.CurrencyExchange;
-import org.example.model.CurrencyExchangeTableModel;
 
 public class GUI extends JFrame
 {
+    private String[][] db_data = new String[34][6];
+    private String[] columNames = {"id", "value", "nominal", "name", "code", "date"};
     private JPanel Panel;
     private JTable Table;
     private JMenuBar MenuBar;
@@ -28,13 +28,12 @@ public class GUI extends JFrame
     private JMenuItem about;
     private JButton update;
 
-
-//    private CurrencyExchangeController currencyExchangeController;
+    private DataBase database;
 
     public GUI(String title) {
         super(title);
 
-//        currencyExchangeController = CBCurrencyController.getInstance();
+        database = DataBase.getInstance();
 
         Panel = new JPanel(new BorderLayout());
 
@@ -58,7 +57,7 @@ public class GUI extends JFrame
         about.setAction(new About(this));
         help.add(about);
 
-        Table = new JTable();
+        Table = new JTable(db_data, columNames);
         Table.setFillsViewportHeight(true);
         JScrollPane scrollPane = new JScrollPane(Table);
         Panel.add(scrollPane, BorderLayout.CENTER);
@@ -71,7 +70,6 @@ public class GUI extends JFrame
         updatePanel.setBorder(BorderFactory.createEmptyBorder(5, 0, 5, 10000));
         updatePanel.add(Box.createHorizontalGlue());
         updatePanel.add(update);
-        updateTableContent();
         Panel.add(updatePanel, BorderLayout.NORTH);
 
         this.setJMenuBar(MenuBar);
@@ -82,12 +80,39 @@ public class GUI extends JFrame
     }
 
     public void onUpdateButtonClick(ActionEvent e) {
-        currencyExchangeController.updateCurrency(LocalDate.now());
         updateTableContent();
     }
 
-    public void updateTableContent() {
-        List<CurrencyExchange> allCurrencyExchanges = currencyExchangeController.getAllCurrencyExchanges();
-        Table.setModel(new CurrencyExchangeTableModel(allCurrencyExchanges));
+    public void updateTableContent(){
+        database.getConnection();
+        database.delete();
+        database.insert();
+        database.getValue();
+        Data();
+        Table.updateUI();
+    }
+
+    public void Data(){
+        List<CurrencyExchange> c = database.getCur();
+        for (int i = 0; i < 34; i++){
+            db_data[i][0] = c.get(i).getId().toString();
+            db_data[i][1] = c.get(i).getValue().toString();
+            db_data[i][2] = c.get(i).getNominal().toString();
+            db_data[i][3] = c.get(i).getCurrencyName();
+            db_data[i][4] = c.get(i).getCurrencyCode();
+            db_data[i][5] = c.get(i).getDate().toString();
+        }
+    }
+
+    public void json(ActionEvent e){
+        ObjectMapper mapper = new ObjectMapper();
+        for (int i = 0; i < 34; i++){
+            try {
+                mapper.writeValueAsString(database.getCur().get(i));
+            } catch (JsonProcessingException a) {
+                throw new RuntimeException(a);
+            }
+        }
+
     }
 }

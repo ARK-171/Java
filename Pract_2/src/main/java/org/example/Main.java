@@ -1,31 +1,45 @@
 package org.example;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
+
 import java.io.IOException;
-import java.nio.charset.Charset;
 
-import com.fasterxml.jackson.dataformat.xml.XmlMapper;
-import org.example.dto.ValCurs;
-import org.example.dto.Valute;
-import org.example.http.CbrService;
-import org.example.Date;
-import org.example.model.CurrencyExchange;
-import retrofit.RestAdapter;
-import retrofit.converter.JacksonConverter;
+import com.formdev.flatlaf.FlatIntelliJLaf;
 
+
+import javax.swing.*;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+
 
 
 public class Main {
     private static String USER_HOME = System.getProperty("user.home");
     public static Path USER_HOME_PATH = Paths.get(USER_HOME != null ? USER_HOME : "./");
+    private static DataBase db = DataBase.getInstance();
 
-    public static void main(String[] args) throws IOException {
-
+    public static void main(String[] args) {
+        onStart();
+        JFrame win = new GUI("Практика 2");
+        win.setVisible(true);
     }
+
+    public static void onStart() {
+        db.getConnection();
+        db.delete();
+        db.insert();
+        if (!Files.exists(Path.of(db.db_Path))) {
+            try {
+                Files.createDirectory(Path.of(db.db_Path));
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+
+        try {
+            UIManager.setLookAndFeel(new FlatIntelliJLaf());
+        } catch (Exception e) {
+        }
+    }
+
 }

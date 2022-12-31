@@ -6,8 +6,8 @@ public class CurrencyExchange {
 	private Integer id;
 	private Double value;
 	private Integer nominal;
-	private String currencyName;
-	private String currencyCode;
+	private String name;
+	private String code;
 	private LocalDate date;
 
 	public CurrencyExchange() {
@@ -17,8 +17,8 @@ public class CurrencyExchange {
 		this.id = id;
 		this.value = value;
 		this.nominal = nominal;
-		this.currencyName = currencyName;
-		this.currencyCode = currencyCode;
+		this.name = currencyName;
+		this.code = currencyCode;
 		this.date = date;
 	}
 
@@ -47,19 +47,19 @@ public class CurrencyExchange {
 	}
 
 	public String getCurrencyName() {
-		return currencyName;
+		return name;
 	}
 
 	public void setCurrencyName(String currencyName) {
-		this.currencyName = currencyName;
+		this.name = currencyName;
 	}
 
 	public String getCurrencyCode() {
-		return currencyCode;
+		return code;
 	}
 
 	public void setCurrencyCode(String currencyCode) {
-		this.currencyCode = currencyCode;
+		this.code = currencyCode;
 	}
 
 	public LocalDate getDate() {

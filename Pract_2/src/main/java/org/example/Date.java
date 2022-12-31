@@ -16,4 +16,12 @@ public class Date {
         writer.append(day).append("/").append(month).append("/").append(year);
         return writer.toString();
     }
+    public String getDat(){
+        int day = date.getDayOfMonth();
+        int month = date.getMonthValue();
+        int year = date.getYear();
+        StringBuilder writer = new StringBuilder();
+        writer.append("\'").append(year).append("-").append(month).append("-").append(day).append("\'");
+        return writer.toString();
+    }
 }
