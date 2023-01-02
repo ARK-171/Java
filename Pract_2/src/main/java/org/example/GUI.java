@@ -5,8 +5,6 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.List;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.example.action.ExportToCsv;
 import org.example.action.ExportToJson;
 import org.example.action.Exit;
@@ -104,15 +102,5 @@ public class GUI extends JFrame
         }
     }
 
-    public void json(ActionEvent e){
-        ObjectMapper mapper = new ObjectMapper();
-        for (int i = 0; i < 34; i++){
-            try {
-                mapper.writeValueAsString(database.getCur().get(i));
-            } catch (JsonProcessingException a) {
-                throw new RuntimeException(a);
-            }
-        }
 
-    }
 }

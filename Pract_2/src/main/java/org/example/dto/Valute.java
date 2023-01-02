@@ -3,10 +3,8 @@ package org.example.dto;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import org.example.Date;
-import org.example.dto.util.DayOfWeekService;
 import org.example.dto.util.DoubleDeserializer;
 
-import java.time.LocalDate;
 
 public class Valute {
 	private static int x = 1;

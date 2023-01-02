@@ -4,7 +4,6 @@ import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 import retrofit.RestAdapter;
 import retrofit.converter.JacksonConverter;
 
-import java.util.Objects;
 
 public class CB {
 
