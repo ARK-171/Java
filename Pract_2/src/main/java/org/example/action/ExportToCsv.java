@@ -34,13 +34,6 @@ public class ExportToCsv extends AbstractAction {
         }
         try (FileWriter writer = new FileWriter(path.toFile())){
             writer.write(s);
-            /*
-            BufferedWriter bw = Files.newBufferedWriter(path, StandardCharsets.UTF_8);
-            for(int i =0; i<34; i++){
-                s = s + list.get(i).getId().toString() + " , " + list.get(i).getValue().toString() + " , " + list.get(i).getNominal().toString() + " , " + list.get(i).getCurrencyName() + " , " + list.get(i).getCurrencyCode() + " , " + list.get(i).getDate().toString() + " \n ";
-                bw.write(s);
-            }
-*/
             System.out.println(s);
         } catch (IOException e) {
             throw new RuntimeException(e);
